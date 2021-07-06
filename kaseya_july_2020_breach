@@ -1,0 +1,79 @@
+Kaseya  Other  Informational
+Incident Overview & Technical Details
+In an effort to be transparent with our customers, Kaseya is sharing the following information concerning the recent ransomware attack.  The investigation is ongoing and, as such, this information is subject to change.  As more information becomes available, we will continue to provide updates.
+
+Incident Overview
+
+On Friday, July 2nd, Kaseya received reports from customers and others suggesting unusual behavior occurring on endpoints managed by the Kaseya VSA on-premises product.  Shortly thereafter, customer reports indicated that ransomware was being executed on endpoints.  In light of these reports, the executive team convened and made the decision to take two steps to try to prevent the spread of any malware:  we sent notifications to on-premises customers to shut off their VSA servers and we shut down our VSA SaaS infrastructure. 
+
+The attackers were able to exploit zero-day vulnerabilities in the VSA product to bypass authentication and run arbitrary command execution.  This allowed the attackers to leverage the standard VSA product functionality to deploy ransomware to endpoints.  There is no evidence that Kaseya’s VSA codebase has been maliciously modified.    
+
+Mandiant was quickly engaged to investigate the incident.  We have been actively engaged with Mandiant to assess the manner and impact of the attack.  We are also cooperating with federal law enforcement to ensure that they have the information they need to investigate this attack.  Below, we provide some of the technical details that we have been able to confirm in the course of the investigation. 
+
+To date, we are aware of fewer than 60 Kaseya customers, all of which were using the VSA on-premises product, who was directly compromised by this attack.  While many of these customers provide IT services to multiple other companies, we understand the total impact thus far has been to fewer than 1,500 downstream businesses.  We have not found any evidence that any of our SaaS customers were compromised.
+
+We have begun our restoration process and are developing and readying for deployment to our VSA customers a fix for this issue.  On July 3rd, Kaseya released a Compromise Detection Tool to customers.  This tool analyzes the user’s system (either VSA server or managed endpoint) and determines whether any indicators of compromise (IOC) are present.  To date, over 2,000 customers have downloaded the tool.  Updates on this are being posted at the following link: https://helpdesk.kaseya.com/hc/en-gb/articles/4403440684689.  We are working to bring our SaaS environment up safely and provide an update for on-premises customers.
+
+We know there is a lot of information circulating about this incident.  Some of it is accurate, much of it is not.  We will continue our efforts to keep you updated as we have solid, actionable information to share.
+
+Technical Details & Indicators of Compromise (IOCs)
+
+From the review of data provided by clients, we have identified IOCs. We are providing the following IOC information to aid our customers and security researchers in their investigations.  Kaseya’s investigation is ongoing and, as such, this information is subject to change.
+
+Network IOCs
+
+The following IP addresses were seen accessing VSA Servers remotely to perform the attack sequence:
+
+35.226.94[.]113
+
+161.35.239[.]148
+
+162.253.124[.]162
+
+Endpoint IOCs
+
+The following files were used as part of the deployment of the encryptor:
+
+Filename
+
+MD5 Hash
+
+Function
+
+cert.exe
+
+N/A – Legitimate File with random string appended
+
+Legit certutil.exe Utility
+
+agent.crt
+
+939aae3cc456de8964cb182c75a5f8cc
+
+Encoded malicious content
+
+agent.exe
+
+561cffbaba71a6e8cc1cdceda990ead4
+
+Decoded contents of agent.crt
+
+mpsvc.dll
+
+a47cf00aedf769d60d58bfe00c0b5421
+
+Ransomware Payload
+
+ 
+
+Web Log Indicators
+
+The following are excerpts from the IIS access logs of a compromised VSA server. They depict a sequential series of HTTP requests that the threat actor made to perform their attack. If this sequence of requests is present in the IIS logs of a VSA server, it suggests the threat actor either attempted to or successfully used it to perform their attack.
+
+POST /dl.asp curl/7.69.1
+GET /done.asp curl/7.69.1
+POST /cgi-bin/KUpload.dll curl/7.69.1
+GET /done.asp curl/7.69.1
+POST /cgi-bin/KUpload.dll curl/7.69.1
+POST /userFilterTableRpt.asp curl/7.69.1
+
